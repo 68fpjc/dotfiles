@@ -11,7 +11,7 @@ uname -r | grep -q -i microsoft
 if [ $? -eq 0 ]; then
     if [ "$USERPROFILE" != "" ]; then
         [ -L $HOME/winhome ] || ln -s $USERPROFILE $HOME/winhome
-        which socat > /dev/null; [ $? -ne 0 ] && brew install socat
+        which socat > /dev/null; [ $? -ne 0 ] && brew install patchelf && brew install socat
         export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
         ss -a | grep -q $SSH_AUTH_SOCK
         if [ $? -ne 0 ]; then
