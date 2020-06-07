@@ -1,7 +1,13 @@
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
+if [ ! -d /home/linuxbrew/.linuxbrew ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
 uname -r | grep -q -i microsoft
-if [ $? ]; then
+if [ $? -eq 0 ]; then
+    which socat > /dev/null; [ $? -ne 0 ] && brew install socat
     export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
     ss -a | grep -q $SSH_AUTH_SOCK
     if [ $? -ne 0 ]; then
