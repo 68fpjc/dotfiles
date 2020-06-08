@@ -23,3 +23,7 @@ if [ $? -eq 0 ]; then
         echo USERPROFILE not defined.
     fi
 fi
+
+which nvim > /dev/null; [ $? -ne 0 ] && brew install neovim
+export EDITOR=nvim
+export VISUAL=nvim
