@@ -20,8 +20,11 @@ if [ $? -eq 0 ]; then
         [ -L winhome ] || ln -s $USERPROFILE winhome
         which socat > /dev/null; [ $? -ne 0 ] && brew install patchelf && brew install socat
     else
-        echo WARNING: Define USERPROFILE and try again.
+        echo ERROR: Define USERPROFILE and try again.
+        exit 1
     fi
 fi
 
 which nvim > /dev/null; [ $? -ne 0 ] && brew install neovim
+
+exec $SHELL -l
