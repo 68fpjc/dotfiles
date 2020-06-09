@@ -25,5 +25,3 @@ if [ $? -eq 0 ]; then
 fi
 
 which nvim > /dev/null; [ $? -ne 0 ] && brew install neovim
-
-. .bash_profile
