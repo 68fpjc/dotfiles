@@ -11,6 +11,7 @@ done
 if [ ! -d /home/linuxbrew/.linuxbrew ]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 [ -d .ssh ] || mkdir .ssh && chmod 700 .ssh
 uname -r | grep -q -i microsoft
@@ -24,3 +25,5 @@ if [ $? -eq 0 ]; then
 fi
 
 which nvim > /dev/null; [ $? -ne 0 ] && brew install neovim
+
+. .bash_profile
