@@ -1,17 +1,41 @@
 #! /bin/sh
 
-cd
-[ -d dotfiles ] || git clone https://github.com/68fpjc/dotfiles.git && sed -i 's|https://github.com/|git@github.com:|' dotfiles/.git/config
-find dotfiles -maxdepth 1 -name '.*' -not -name '.' -not -name '.git' | while read A; do
-  B=$(basename $A)
-  [ -f $B -o -d $B ] && rm -fr $B
-  ln -s $A $B
+if [ -d dotfiles ]; then
+    cd dotfiles/
+    git fetch
+    git merge
+    cd ../
+else
+    git clone https://github.com/68fpjc/dotfiles.git
+    sed -i 's|https://github.com/|git@github.com:|' dotfiles/.git/config
+fi
+
+PROCESSOR=$(uname -m)
+for FILE in .bash_aliases .bash_logout .bash_profile .bashrc; do
+    [ -f dotfiles/orig/${FILE} ] || touch dotfiles/orig/${FILE}
+    if [ ! -h ${FILE} ]; then
+        [ -f ${FILE} ] && mv -f ${FILE} dotfiles/orig/
+        if [ -f dotfiles/${FILE}.${PROCESSOR} ]; then
+            SUFFIX=.${PROCESSOR}
+        else
+            unset SUFFIX
+        fi
+        ln -s dotfiles/${FILE}${SUFFIX} ${FILE}
+    fi
 done
 
-if [ ! -d /home/linuxbrew/.linuxbrew ]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-fi
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+case "${PROCESSOR}" in
+    "armv7l")
+        which nvim > /dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends neovim
+        ;;
+    *)
+        if [ ! -d /home/linuxbrew/.linuxbrew ]; then
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        fi
+        eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+        which nvim > /dev/null; [ $? -ne 0 ] && brew install neovim
+        ;;
+esac
 
 [ -d .ssh ] || mkdir .ssh && chmod 700 .ssh
 uname -r | grep -q -i microsoft
@@ -25,6 +49,5 @@ if [ $? -eq 0 ]; then
     fi
 fi
 
-which nvim > /dev/null; [ $? -ne 0 ] && brew install neovim
-
 exec $SHELL -l
+
