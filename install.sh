@@ -35,7 +35,7 @@ uname -r | grep -q -i microsoft
 if [ $? -eq 0 ]; then
     if [ "$USERPROFILE" != "" ]; then
         [ -L winhome ] || ln -s $USERPROFILE winhome
-        which socat > /dev/null; [ $? -ne 0 ] && apt install -y --no-install-recommends patchelf socat
+        which socat > /dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends patchelf socat
     else
         echo ERROR: Define USERPROFILE and try again.
         exit 1
