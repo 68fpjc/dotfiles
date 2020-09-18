@@ -2,6 +2,8 @@
 
 cd
 
+sudo apt update
+
 if [ -d dotfiles ]; then
     cd dotfiles/
     git fetch
