@@ -33,13 +33,13 @@ which nvim > /dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recomme
 [ -d .ssh ] || mkdir .ssh && chmod 700 .ssh
 uname -r | grep -q -i microsoft
 if [ $? -eq 0 ]; then
-    if [ "$USERPROFILE" != "" ]; then
-        [ -L winhome ] || ln -s $USERPROFILE winhome
-        which socat > /dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends patchelf socat
+    if [ -n "${USERPROFILE}" ]; then
+        [ -L winhome ] || ln -s "${USERPROFILE}" winhome
     else
         echo ERROR: Define USERPROFILE and try again.
         exit 1
     fi
+    which socat > /dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends patchelf socat
 fi
 
 exec $SHELL -l
