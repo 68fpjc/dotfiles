@@ -3,6 +3,7 @@
 cd
 
 sudo apt update
+which git >/dev/null || sudo apt install -y --no-install-recommends git
 
 if [ -d dotfiles ]; then
     cd dotfiles/
@@ -28,7 +29,7 @@ for FILE in .bash_aliases .bash_logout .bash_profile .bashrc; do
     fi
 done
 
-which nvim > /dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends neovim
+which nvim >/dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends neovim
 
 [ -d .ssh ] || mkdir .ssh && chmod 700 .ssh
 uname -r | grep -q -i microsoft
@@ -39,7 +40,7 @@ if [ $? -eq 0 ]; then
         echo ERROR: Define USERPROFILE and try again.
         exit 1
     fi
-    which socat > /dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends patchelf socat
+    which socat >/dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends patchelf socat
 fi
 
 exec $SHELL -l
