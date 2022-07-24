@@ -9,7 +9,7 @@ if [ $? -eq 0 ]; then
             ss -a | grep -q "${SSH_AUTH_SOCK}"
             if [ $? -ne 0 ]; then
                 rm -f "${SSH_AUTH_SOCK}"
-                (setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"${HOME}/winhome/.wsl/npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork &) >/dev/null 2>&1
+                (setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"${HOME}/winhome/scoop/apps/wsl-ssh-agent/current/npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork &) >/dev/null 2>&1
             fi
         fi
     else # WSL
