@@ -3,7 +3,7 @@
 uname -r | grep -q -i microsoft
 if [ $? -eq 0 ]; then
     if [ -d /run/WSL/ ]; then # WSL2
-        export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+        # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
         if [ -n "${USERPROFILE}" ]; then
             export SSH_AUTH_SOCK=${HOME}/.ssh/agent.sock
             ss -a | grep -q "${SSH_AUTH_SOCK}"
@@ -13,7 +13,7 @@ if [ $? -eq 0 ]; then
             fi
         fi
     else # WSL
-        export DISPLAY=:0
+        # export DISPLAY=:0
         [ -n "${WSL_AUTH_SOCK}" ] && export SSH_AUTH_SOCK=${WSL_AUTH_SOCK}
     fi
 fi
