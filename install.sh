@@ -40,7 +40,19 @@ if [ $? -eq 0 ]; then
         echo ERROR: Define USERPROFILE and try again.
         exit 1
     fi
-    which socat >/dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends patchelf socat
+    if [ -d /run/WSL/ ]; then
+        mkdir -p .local/bin || exit 1
+        if [ -f winhome/scoop/apps/wsl-ssh-agent/current/npiperelay.exe ] && [ ! -e winhome/.wsl/npiperelay.exe ]; then
+            mkdir -p winhome/.wsl || exit 1
+            cp -p winhome/scoop/apps/wsl-ssh-agent/current/npiperelay.exe winhome/.wsl/ || exit 1
+        fi
+        curl -fsSL https://raw.githubusercontent.com/rupor-github/wsl-ssh-agent/master/docs/wsl-ssh-agent-relay -o .local/bin/wsl-ssh-agent-relay || {
+            echo ERROR: Failed to download wsl-ssh-agent-relay.
+            exit 1
+        }
+        chmod +x .local/bin/wsl-ssh-agent-relay || exit 1
+        which socat >/dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommends socat
+    fi
 fi
 
 exec $SHELL -l
