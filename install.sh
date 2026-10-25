@@ -34,10 +34,8 @@ which nvim >/dev/null; [ $? -ne 0 ] && sudo apt install -y --no-install-recommen
 [ -d .ssh ] || mkdir .ssh && chmod 700 .ssh
 uname -r | grep -q -i microsoft
 if [ $? -eq 0 ]; then
-    if [ -n "${USERPROFILE}" ]; then
-        [ -L winhome ] || ln -s "${USERPROFILE}" winhome
-    else
-        echo ERROR: Define USERPROFILE and try again.
+    if [ ! -d winhome ]; then
+        echo ERROR: Create ~/winhome as a link to your Windows home directory and try again.
         exit 1
     fi
     if [ -d /run/WSL/ ]; then
