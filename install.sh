@@ -55,4 +55,9 @@ if [ $? -eq 0 ]; then
     fi
 fi
 
+git clone https://github.com/asdf-vm/asdf.git .asdf/ --branch v0.14.0
+cd .asdf/
+git switch -c v0.14.0
+cd ..
+
 exec $SHELL -l
