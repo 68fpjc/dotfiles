@@ -53,9 +53,37 @@ if [ $? -eq 0 ]; then
     fi
 fi
 
-git clone https://github.com/asdf-vm/asdf.git .asdf/ --branch v0.14.0
-cd .asdf/
-git switch -c v0.14.0
-cd ..
+ASDF_VERSION=v0.20.2
+case "$(uname -m)" in
+    x86_64) ASDF_ARCH=amd64 ;;
+    aarch64|arm64) ASDF_ARCH=arm64 ;;
+    i386|i686) ASDF_ARCH=386 ;;
+    *)
+        echo "ERROR: asdf ${ASDF_VERSION} has no prebuilt Linux binary for $(uname -m)."
+        exit 1
+        ;;
+esac
+
+mkdir -p .local/bin .asdf || exit 1
+ASDF_TMP=$(mktemp -d) || exit 1
+if ! curl -fsSL "https://github.com/asdf-vm/asdf/releases/download/${ASDF_VERSION}/asdf-${ASDF_VERSION}-linux-${ASDF_ARCH}.tar.gz" -o "${ASDF_TMP}/asdf.tar.gz"; then
+    rm -f "${ASDF_TMP}/asdf.tar.gz"
+    rmdir "${ASDF_TMP}"
+    echo "ERROR: Failed to download asdf ${ASDF_VERSION}."
+    exit 1
+fi
+if ! tar -xzf "${ASDF_TMP}/asdf.tar.gz" -C "${ASDF_TMP}" asdf || [ ! -f "${ASDF_TMP}/asdf" ]; then
+    rm -f "${ASDF_TMP}/asdf.tar.gz" "${ASDF_TMP}/asdf"
+    rmdir "${ASDF_TMP}"
+    echo "ERROR: Failed to extract asdf ${ASDF_VERSION}."
+    exit 1
+fi
+install -m 755 "${ASDF_TMP}/asdf" .local/bin/asdf || {
+    rm -f "${ASDF_TMP}/asdf.tar.gz" "${ASDF_TMP}/asdf"
+    rmdir "${ASDF_TMP}"
+    exit 1
+}
+rm -f "${ASDF_TMP}/asdf.tar.gz" "${ASDF_TMP}/asdf"
+rmdir "${ASDF_TMP}"
 
 exec $SHELL -l

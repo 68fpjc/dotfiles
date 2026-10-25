@@ -1,4 +1,5 @@
 [ -f "${HOME}/.profile" ] && . "${HOME}/.profile"
+export PATH="${HOME}/.local/bin:${ASDF_DATA_DIR:-${HOME}/.asdf}/shims:${PATH}"
 
 uname -r | grep -q -i microsoft
 if [ $? -eq 0 ]; then

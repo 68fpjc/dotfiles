@@ -4,6 +4,10 @@
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/68fpjc/dotfiles/master/install.sh)"
 ```
 
+The installer installs the asdf `v0.20.2` binary in `~/.local/bin` and keeps
+plugin and shim data in `~/.asdf`. It supports Linux x86_64, ARM64, and 32-bit
+x86.
+
 ## WSL2 SSH agent
 
 Before running the installer in WSL, make sure `~/winhome` exists and points

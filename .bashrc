@@ -2,5 +2,6 @@
 
 export EDITOR=vim
 
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+if command -v asdf >/dev/null 2>&1; then
+    . <(asdf completion bash)
+fi
